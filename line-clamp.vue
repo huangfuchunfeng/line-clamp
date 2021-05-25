@@ -2,6 +2,7 @@
   <div class="line-clamp" :style="{backgroundColor:bgColor}">
     <input type="checkbox" class="line-clamp-checkbox" :id="id" />
     <div class="line-clamp-content" :style="{maxHeight:maxHeight}">
+      <span class="line-clamp-space" :style="{height:height}"></span>
       <label :for="id" class="line-clamp-btn line-clamp-btn-open">
         <span :style="{color:btn.color}">{{btn.open}}</span>
       </label>
@@ -34,6 +35,9 @@ export default defineComponent({
   },
   methods: {},
   computed: {
+    height(): string {
+      return (this.line - 1) * 1.5 + 'em'
+    },
     maxHeight(): string {
       return this.line * 1.5 + 'em'
     },
@@ -45,11 +49,12 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 .line-clamp {
-  display: flex;
+  &-space {
+    float: right;
+  }
   &-checkbox {
     display: none;
   }
-
   &-content {
     line-height: 1.5;
     position: relative;
@@ -57,11 +62,6 @@ export default defineComponent({
     text-overflow: ellipsis;
     text-align: justify;
     background-color: inherit;
-    &::before {
-      float: right;
-      height: calc(100% - 1.436em);
-      content: '';
-    }
     &::after {
       position: absolute;
       width: 100%;
@@ -85,6 +85,9 @@ export default defineComponent({
       display: none;
       margin-left: 0.5em;
     }
+  }
+  &-checkbox:checked + &-content > &-space {
+    display: none;
   }
   &-checkbox:checked + &-content {
     max-height: inherit !important;
