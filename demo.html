@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>纯css 展开和收起</title>
+  <style>
+    .container {
+      padding: 50px;
+    }
+
+    .line-clamp {
+      display: flex;
+    }
+
+    .line-clamp-content {
+      max-height: 4.5em;
+      line-height: 1.5;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: justify;
+      position: relative;
+    }
+
+    .line-clamp-content::before {
+      content: '';
+      width: 0;
+      float: right;
+      height: calc(100% - 1.5em + 1px);
+    }
+
+    .line-clamp-content::after {
+      content: '';
+      position: absolute;
+      width: 200vw;
+      height: 100vh;
+      box-shadow: inset -100vw calc(1.5em - 100vh) 0 0 #fff;
+      margin-left: -100vw;
+    }
+
+
+
+    .line-clamp-btn {
+      float: right;
+      background-color: rgb(136, 110, 160);
+      border-radius: 0.2em;
+      padding: 0 0.2em;
+      clear: both;
+    }
+
+    .line-clamp-btn>span {
+      color: #fff;
+    }
+
+    .line-clamp-btn-open {
+      margin-left: 1.3em;
+      transform: translate(0, -1px);
+      position: relative;
+      cursor: pointer;
+    }
+
+    .line-clamp-btn-open::before {
+      content: '...';
+      transform: translate(-1.3em, 0);
+      position: absolute;
+    }
+
+    .line-clamp-btn-close,
+    .line-clamp-checkbox,
+    .line-clamp-checkbox:checked+.line-clamp-content::before,
+    .line-clamp-checkbox:checked+.line-clamp-content::after,
+    .line-clamp-checkbox:checked+.line-clamp-content .line-clamp-btn-open {
+      display: none;
+    }
+
+    .line-clamp-checkbox:checked+.line-clamp-content {
+      max-height: inherit;
+    }
+
+    .line-clamp-checkbox:checked+.line-clamp-content .line-clamp-btn-close {
+      display: inherit;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>纯css实现展开和收起</h1>
+    <div class="line-clamp">
+      <input type="checkbox" class="line-clamp-checkbox" id="checkbox" />
+      <div class="line-clamp-content">
+        <label for="checkbox" class="line-clamp-btn line-clamp-btn-open">
+          <span>展开</span>
+        </label>
+        主要利用 float:right CSS属性 指定元素应沿其容器的右侧放置，允许文本和内联元素环绕它。
+        该元素从网页的正常流动(文档流)中移除，尽管仍然保持部分的流动性。
+        然后利用另一个浮动元素把指定元素置于右下角，通过父容器
+        display:flex（grid）的特性，flex项尺寸会根据内容自动计算，flex项子项可以使用百分比高度，获取到位置高度<code>calc(100% - 1.5em +1px)</code>
+        加 1px 是为了避免计算出现小数高度不够。
+        <label for="checkbox" class="line-clamp-btn line-clamp-btn-close">
+          <span>收起</span>
+        </label>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
