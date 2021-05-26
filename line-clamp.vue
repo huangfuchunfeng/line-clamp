@@ -2,10 +2,10 @@
   <div class="line-clamp" :style="{backgroundColor:bgColor}">
     <input type="checkbox" class="line-clamp-checkbox" :id="id" />
     <div class="line-clamp-content" :style="{maxHeight:maxHeight}">
-      <span class="line-clamp-space" :style="{height:height}"></span>
       <label :for="id" class="line-clamp-btn line-clamp-btn-open">
         <span :style="{color:btn.color}">{{btn.open}}</span>
       </label>
+      <slot></slot>
       <slot></slot>
       <label :for="id" class="line-clamp-btn line-clamp-btn-close">
         <span :style="{color:btn.color}">{{btn.close}}</span>
@@ -36,7 +36,7 @@ export default defineComponent({
   methods: {},
   computed: {
     height(): string {
-      return (this.line - 1) * 1.5 + 'em'
+      return (this.line - 1) * 1.5 + 0.005 + 'em'
     },
     maxHeight(): string {
       return this.line * 1.5 + 'em'
@@ -49,9 +49,8 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 .line-clamp {
-  &-space {
-    float: right;
-  }
+  display: flex;
+
   &-checkbox {
     display: none;
   }
@@ -62,32 +61,39 @@ export default defineComponent({
     text-overflow: ellipsis;
     text-align: justify;
     background-color: inherit;
-    &::after {
-      position: absolute;
-      width: 100%;
+    &::before {
       content: '';
-      background-color: inherit;
-      height: 2em;
+      width: 0;
+      float: right;
+      height: calc(100% - 1.5em + 1px);
+    }
+    &::after {
+      content: '';
+      position: absolute;
+      width: 200vw;
+      height: 100vh;
+      box-shadow: inset -100vw calc(1.5em - 100vh) 0 0 #fff;
+      margin-left: -100vw;
     }
   }
   &-btn {
     float: right;
     clear: both;
-    margin-left: 0.5em;
+    position: relative;
+    cursor: pointer;
     &-open {
+      margin-left: 1.3em;
+      transform: translate(0, -1px);
       &::before {
         content: '...';
-        transform: translate(-0.5em, 0);
-        display: inline-block;
+        transform: translate(-1.3em, 0);
+        position: absolute;
       }
     }
     &-close {
       display: none;
       margin-left: 0.5em;
     }
-  }
-  &-checkbox:checked + &-content > &-space {
-    display: none;
   }
   &-checkbox:checked + &-content {
     max-height: inherit !important;
